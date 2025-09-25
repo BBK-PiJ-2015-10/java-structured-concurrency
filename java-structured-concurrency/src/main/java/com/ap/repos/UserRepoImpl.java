@@ -20,13 +20,14 @@ public class UserRepoImpl implements UserRepo {
     @Override
     public User findUserByIdPort(UserId userId) {
         logger.info("Finding user with id {}", userId);
-        try {
-            delay(Duration.ofMillis(5000));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        User user = new User(new Username("alex"), userId, new Email("alexis.gmail.com"));
-        logger.info("Founder user {}", user);
-        return user;
+        throw new RuntimeException("Error finding user with id '%s'".formatted(userId));
+//        try {
+//            delay(Duration.ofMillis(5000));
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//        User user = new User(new Username("alex"), userId, new Email("alexis.gmail.com"));
+//        logger.info("Founder user {}", user);
+//        return user;
     }
 }
