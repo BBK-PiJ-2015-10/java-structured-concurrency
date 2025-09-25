@@ -5,8 +5,8 @@ import com.ap.repos.GitHubRepo;
 import com.ap.repos.GitHubRepoImpl;
 import com.ap.repos.UserRepo;
 import com.ap.repos.UserRepoImpl;
-import com.ap.service.FindGitHubUseCase;
-import com.ap.service.FindGitHubUseCaseImpl;
+import com.ap.service.FindGitHubUserImpl;
+import com.ap.service.FindGitHubUserUseCase;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -24,7 +24,7 @@ public class Main {
         GitHubRepo gitHubRepo = new GitHubRepoImpl();
         UserRepo userRepo = new UserRepoImpl();
 
-        FindGitHubUseCase useCase = new FindGitHubUseCaseImpl(gitHubRepo, userRepo);
+        FindGitHubUserUseCase useCase = new FindGitHubUserImpl(gitHubRepo, userRepo);
 
         UserId userId1 = new UserId(1L);
 

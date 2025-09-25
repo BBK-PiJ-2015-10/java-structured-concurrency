@@ -9,12 +9,11 @@ import com.ap.repos.UserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.temporal.ValueRange;
 import java.util.List;
 import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.StructuredTaskScope.Subtask;
 
-public class FindGitHubUseCaseImpl implements FindGitHubUseCase {
+public class FindGitHubUserImpl implements FindGitHubUserUseCase {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -22,7 +21,7 @@ public class FindGitHubUseCaseImpl implements FindGitHubUseCase {
 
     private final UserRepo userRepo;
 
-    public FindGitHubUseCaseImpl(GitHubRepo gitHubRepo, UserRepo userRepo) {
+    public FindGitHubUserImpl(GitHubRepo gitHubRepo, UserRepo userRepo) {
         this.gitHubRepo = gitHubRepo;
         this.userRepo = userRepo;
     }
