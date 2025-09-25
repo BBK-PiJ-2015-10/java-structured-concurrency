@@ -1,16 +1,15 @@
-package com.ap.services;
+package com.ap.repos;
 
-import com.ap.dtos.*;
+import com.ap.dtos.Email;
+import com.ap.dtos.User;
+import com.ap.dtos.UserId;
+import com.ap.dtos.Username;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.time.Duration;
-import java.util.List;
 
-import static com.ap.dtos.Visibility.PUBLIC;
-
-public class GitHubRepository implements GitHubRepo, UserRepo {
+public class UserRepoImpl implements UserRepo {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -19,16 +18,15 @@ public class GitHubRepository implements GitHubRepo, UserRepo {
     }
 
     @Override
-    public List<Repository> findRepositories(UserId userId) {
-        logger.info("Finding repo for userId {}", userId.userId());
-        var repositories = List.of(new Repository("alexis", PUBLIC, URI.create("dd")));
-        return repositories;
-    }
-
-    @Override
     public User findUserByIdPort(UserId userId) {
         logger.info("Finding user with id {}", userId);
+        try {
+            delay(Duration.ofMillis(5000));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         User user = new User(new Username("alex"), userId, new Email("alexis.gmail.com"));
+        logger.info("Founder user {}", user);
         return user;
     }
 }

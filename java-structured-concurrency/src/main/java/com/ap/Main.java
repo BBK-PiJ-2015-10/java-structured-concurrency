@@ -1,12 +1,12 @@
 package com.ap;
 
-import ch.qos.logback.classic.spi.LoggerRemoteView;
-import com.ap.dtos.User;
 import com.ap.dtos.UserId;
-import com.ap.services.GitHubRepository;
-import org.slf4j.Logger;
-
-import java.security.Provider;
+import com.ap.repos.GitHubRepo;
+import com.ap.repos.GitHubRepoImpl;
+import com.ap.repos.UserRepo;
+import com.ap.repos.UserRepoImpl;
+import com.ap.service.FindGitHubUseCase;
+import com.ap.service.FindGitHubUseCaseImpl;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -20,17 +20,17 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.printf("Hello and welcome!");
 
-        GitHubRepository service = new GitHubRepository();
+
+        GitHubRepo gitHubRepo = new GitHubRepoImpl();
+        UserRepo userRepo = new UserRepoImpl();
+
+        FindGitHubUseCase useCase = new FindGitHubUseCaseImpl(gitHubRepo, userRepo);
 
         UserId userId1 = new UserId(1L);
 
-        service.findRepositories(userId1);
+        useCase.findGitHubUser(userId1);
 
+        //service.findRepositories(userId1);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
     }
 }

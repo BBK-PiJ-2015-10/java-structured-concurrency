@@ -1,4 +1,7 @@
 package com.ap.dtos;
 
-public record GitHubUser() {
+
+import java.util.List;
+
+public record GitHubUser(User user, List<Repository> repositories) {
 }
