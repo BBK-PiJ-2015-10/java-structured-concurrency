@@ -22,8 +22,10 @@ public class FindGitHubUsersImpl implements FindGitHubUsersUseCase {
     @Override
     public List<GitHubUser> findGitHubUsers(List<UserId> userIds) {
         try (var scope = StructuredTaskScope.open(Joiner.<GitHubUser>allSuccessfulOrThrow())) {
+            logger.info("Fetching data for ids {}",userIds );
             userIds.forEach(userId -> scope.fork(() -> findGitHubUserUseCase.findGitHubUser(userId)));
             var result = scope.join().map(StructuredTaskScope.Subtask::get).toList();
+            logger.info("Fetched data for ids {}",userIds );
             return result;
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

@@ -7,6 +7,10 @@ import com.ap.repos.UserRepo;
 import com.ap.repos.UserRepoImpl;
 import com.ap.service.FindGitHubUserImpl;
 import com.ap.service.FindGitHubUserUseCase;
+import com.ap.service.FindGitHubUsersImpl;
+import com.ap.service.FindGitHubUsersUseCase;
+
+import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -25,10 +29,12 @@ public class Main {
         UserRepo userRepo = new UserRepoImpl();
 
         FindGitHubUserUseCase useCase = new FindGitHubUserImpl(gitHubRepo, userRepo);
+        FindGitHubUsersUseCase useCases = new FindGitHubUsersImpl(useCase);
 
         UserId userId1 = new UserId(1L);
+        UserId userId2 = new UserId(2L);
 
-        useCase.findGitHubUser(userId1);
+        useCases.findGitHubUsers(List.of(userId1, userId2));
 
         //service.findRepositories(userId1);
 
