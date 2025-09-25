@@ -29,10 +29,12 @@ public class FindGitHubUserImpl implements FindGitHubUserUseCase {
     @Override
     public GitHubUser findGitHubUser(UserId userId) {
         try (var scope = StructuredTaskScope.open()) {
+            logger.info("Fetching all data for user with id {}", userId.userId());
             Subtask<User> user = scope.fork(() -> userRepo.findUserByIdPort(userId));
             Subtask<List<Repository>> repositories = scope.fork(() -> gitHubRepo.findRepositories(userId));
             // The above two are parallel, only blocked by below
             scope.join();
+            logger.info("Fetched all data for user with id {}", userId.userId());
             return new GitHubUser(user.get(), repositories.get());
         } catch (InterruptedException e) {
             logger.error("Something went off {}", e);
