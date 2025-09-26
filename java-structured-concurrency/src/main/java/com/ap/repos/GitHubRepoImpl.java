@@ -12,10 +12,6 @@ public class GitHubRepoImpl implements GitHubRepo {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    private void delay(Duration duration) throws InterruptedException {
-        Thread.sleep(duration);
-    }
-
     @Override
     public List<Repository> findRepositories(UserId userId) {
         logger.info("Finding repos for userId {}", userId.userId());

@@ -13,10 +13,6 @@ public class UserRepoImpl implements UserRepo {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    private void delay(Duration duration) throws InterruptedException {
-        Thread.sleep(duration);
-    }
-
     @Override
     public User findUserByIdPort(UserId userId) {
         logger.info("Finding user with id {}", userId.userId());

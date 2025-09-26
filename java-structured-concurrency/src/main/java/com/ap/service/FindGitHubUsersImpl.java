@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import java.util.List;
 import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.StructuredTaskScope.Joiner;
+import java.util.concurrent.StructuredTaskScope.Subtask;
 
 public class FindGitHubUsersImpl implements FindGitHubUsersUseCase {
 
@@ -24,7 +25,7 @@ public class FindGitHubUsersImpl implements FindGitHubUsersUseCase {
         try (var scope = StructuredTaskScope.open(Joiner.<GitHubUser>allSuccessfulOrThrow())) {
             logger.info("Fetching data for ids {}",userIds );
             userIds.forEach(userId -> scope.fork(() -> findGitHubUserUseCase.findGitHubUser(userId)));
-            var result = scope.join().map(StructuredTaskScope.Subtask::get).toList();
+            var result = scope.join().map(Subtask::get).toList();
             logger.info("Fetched data for ids {}",userIds );
             return result;
         } catch (InterruptedException e) {
