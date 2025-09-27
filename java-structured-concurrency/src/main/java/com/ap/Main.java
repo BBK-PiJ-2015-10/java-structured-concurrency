@@ -1,10 +1,7 @@
 package com.ap;
 
 import com.ap.dtos.UserId;
-import com.ap.repos.GitHubRepo;
-import com.ap.repos.GitHubRepoImpl;
-import com.ap.repos.UserRepo;
-import com.ap.repos.UserRepoImpl;
+import com.ap.repos.*;
 import com.ap.service.FindGitHubUserImpl;
 import com.ap.service.FindGitHubUserUseCase;
 import com.ap.service.FindGitHubUsersImpl;
@@ -25,16 +22,25 @@ public class Main {
         System.out.printf("Hello and welcome!");
 
 
-        GitHubRepo gitHubRepo = new GitHubRepoImpl();
+        GitHubCachedRepo cachedRepo = new GitHubCachedRepo();
+        GitHubRepoRemoteImpl remoteRepo = new GitHubRepoRemoteImpl();
+        GitHubRepo gitHubRepo = new GitHubRepoImpl(cachedRepo,remoteRepo);
+
         UserRepo userRepo = new UserRepoImpl();
 
-        FindGitHubUserUseCase useCase = new FindGitHubUserImpl(gitHubRepo, userRepo);
+        FindGitHubUserUseCase useCase = new FindGitHubUserImpl(remoteRepo, userRepo);
         FindGitHubUsersUseCase useCases = new FindGitHubUsersImpl(useCase);
 
         UserId userId1 = new UserId(1L);
         UserId userId2 = new UserId(2L);
 
-        useCases.findGitHubUsers(List.of(userId1, userId2));
+        var result = useCases.findGitHubUsers(List.of(userId1, userId2));
+
+        //var other = result.stream().map(d -> d.repositories().size()).reduce((a, b) -> a +b).get();
+
+        //System.out.println(other);
+
+        result.forEach(a -> System.out.println(a.user().userId().userId()));
 
         //service.findRepositories(userId1);
 

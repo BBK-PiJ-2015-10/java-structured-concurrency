@@ -13,14 +13,18 @@ public class UserRepoImpl implements UserRepo {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
+    private void delay(Duration duration) throws InterruptedException {
+        Thread.sleep(duration);
+    }
+
     @Override
     public User findUserByIdPort(UserId userId) {
-        logger.info("Finding user with id {}", userId.userId());
+        //logger.info("Finding user with id {}", userId.userId());
         //throw new RuntimeException("Error finding user with id '%s'".formatted(userId));
         try {
             delay(Duration.ofMillis(1500));
         } catch (InterruptedException e) {
-            //throw new RuntimeException(e);
+
         }
         User user = new User(new Username("alex"), userId, new Email("alexis.gmail.com"));
         logger.info("Found user with id {}", user.userId().userId());
