@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.StructuredTaskScope.Joiner;
-import java.util.stream.Collectors;
 
 public class GitHubRepoImpl implements GitHubRepo {
 
@@ -23,21 +22,19 @@ public class GitHubRepoImpl implements GitHubRepo {
         this.cache = cachedRepo;
     }
 
-    // StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow()))
     @Override
-    public List<Repository> findRepositories(UserId userId) throws InterruptedException {
-        //logger.info("Finding repo for userId ", userId.userId());
-        // the joiner discards the subtask that fails if any following subtask succeeds
-        // StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())
-        //  try (var scope = StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())) {
-        try (var scope = StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())) {
+    public List<Repository> findRepositories(UserId userId)
+            throws InterruptedException, StructuredTaskScope.FailedException {
+        try (var scope =
+                     StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())) {
             scope.fork(() -> cache.findRepositories(userId));
-            scope.fork(() -> {
-                final List<Repository> remoteRepos = remote.findRepositories(userId);
-                logger.info("Adding to cache repo for userId ", userId.userId());
-                cache.addToCache(userId, remoteRepos);
-            });
-            logger.info("Found repo for userId {} with size {}", userId);
+            scope.fork(() -> remote.findRepositories(userId));
+//                    () -> {
+//                        final List<Repository> repositories = remote.findRepositories(userId);
+//                        logger.info("Received {} remote repositories ",repositories.size());
+//                        cache.addToCache(userId, repositories);
+//                        return repositories;
+//                    });
             return scope.join();
         }
     }

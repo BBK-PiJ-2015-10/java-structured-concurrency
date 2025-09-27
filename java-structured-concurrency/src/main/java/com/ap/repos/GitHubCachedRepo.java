@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 
 public class GitHubCachedRepo implements GitHubRepo {
@@ -29,20 +30,19 @@ public class GitHubCachedRepo implements GitHubRepo {
     @Override
     public List<Repository> findRepositories(UserId userId) {
         //logger.info("Finding cached repo for userId ", userId.userId());
-        var existingRepos = cache.get(userId);
-//        try {
-//            delay(Duration.ofMillis(100));
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+        final List<Repository> existingRepos = cache.get(userId);
+        try {
+            delay(Duration.ofMillis(10));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         if (existingRepos == null) {
             String errorMsg = String.format("No cached repo for userId %s", userId.userId());
             logger.warn(errorMsg);
-            return List.of();
-            //throw new RuntimeException(String.format("Could not find on cache repo for userId %d", userId.userId()));
+            throw new NoSuchElementException(String.format("Could not find on cache repo for userId %d", userId.userId()));
         } else {
             logger.info("Found cached repo for userId ", userId.userId());
-            return List.of();
+            return existingRepos;
         }
     }
 

@@ -41,4 +41,25 @@ public class UseCaseTest {
 
     }
 
+    @Test
+    public void test2() throws InterruptedException {
+
+        GitHubRepoRemoteImpl gitHubRemote = new GitHubRepoRemoteImpl();
+        GitHubCachedRepo gitHubCached = new GitHubCachedRepo();
+        GitHubRepo gitHubRepo = new GitHubRepoImpl(gitHubCached, gitHubRemote);
+
+        UserId userId1 = new UserId(1L);
+
+        var result = gitHubRepo.findRepositories(userId1);
+
+        var repositories = List.of(
+                new Repository(
+                        "raise4s", Visibility.PUBLIC, URI.create("https://github.com/rcardin/raise4s")),
+                new Repository(
+                        "sus4s", Visibility.PUBLIC, URI.create("https://github.com/rcardin/sus4s")));
+
+        Assert.assertEquals(repositories.stream().collect(Collectors.toSet()), result.stream().collect(Collectors.toSet()));
+
+    }
+
 }

@@ -20,9 +20,6 @@ public class GitHubRepoRemoteImpl implements GitHubRepo {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if (userId.userId()==2){
-            throw new RuntimeException("This has gone crazy");
-        }
         var repositories = List.of(
                 new Repository(
                         "raise4s", Visibility.PUBLIC, URI.create("https://github.com/rcardin/raise4s")),
