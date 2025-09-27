@@ -14,13 +14,13 @@ public class GitHubRepoImpl implements GitHubRepo {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    private GitHubRepoRemoteImpl remoteRepo;
+    private GitHubRepoRemoteImpl remote;
 
-    private GitHubCachedRepo cachedRepo;
+    private GitHubCachedRepo cache;
 
     public GitHubRepoImpl(GitHubCachedRepo cachedRepo, GitHubRepoRemoteImpl remoteRepo) {
-        this.remoteRepo = remoteRepo;
-        this.cachedRepo = cachedRepo;
+        this.remote = remoteRepo;
+        this.cache = cachedRepo;
     }
 
     // StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow()))
@@ -30,18 +30,15 @@ public class GitHubRepoImpl implements GitHubRepo {
         // the joiner discards the subtask that fails if any following subtask succeeds
         // StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())
         //  try (var scope = StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())) {
-        try (var scope = StructuredTaskScope.open(Joiner.<List<Repository>>allSuccessfulOrThrow())) {
-            scope.fork(() -> cachedRepo.findRepositories(userId));
+        try (var scope = StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())) {
+            scope.fork(() -> cache.findRepositories(userId));
             scope.fork(() -> {
-                List<Repository> remoteRepos = remoteRepo.findRepositories(userId);
+                final List<Repository> remoteRepos = remote.findRepositories(userId);
                 logger.info("Adding to cache repo for userId ", userId.userId());
-                cachedRepo.addToCache(userId, remoteRepos);
-
+                cache.addToCache(userId, remoteRepos);
             });
-
-            var repositories = scope.join().map(StructuredTaskScope.Subtask::get).flatMap(List::stream).collect(Collectors.toList());
-            logger.info("Found repo for userId {} with size {}", userId, repositories.size());
-            return repositories;
+            logger.info("Found repo for userId {} with size {}", userId);
+            return scope.join();
         }
     }
 }

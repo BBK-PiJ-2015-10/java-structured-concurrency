@@ -18,10 +18,10 @@ public class GitHubCachedRepo implements GitHubRepo {
     private Map<UserId, List<Repository>> cache = new HashMap<>();
 
     public void addToCache(UserId userId, List<Repository> repositories) {
-       // try {
-         //   delay(Duration.ofMillis(100));
+        // try {
+        //   delay(Duration.ofMillis(100));
         //} catch (InterruptedException e) {
-          //  throw new RuntimeException(e);
+        //  throw new RuntimeException(e);
         //}
         cache.put(userId, repositories);
     }
@@ -38,11 +38,11 @@ public class GitHubCachedRepo implements GitHubRepo {
         if (existingRepos == null) {
             String errorMsg = String.format("No cached repo for userId %s", userId.userId());
             logger.warn(errorMsg);
-            return existingRepos;
+            return List.of();
             //throw new RuntimeException(String.format("Could not find on cache repo for userId %d", userId.userId()));
         } else {
             logger.info("Found cached repo for userId ", userId.userId());
-            return existingRepos;
+            return List.of();
         }
     }
 

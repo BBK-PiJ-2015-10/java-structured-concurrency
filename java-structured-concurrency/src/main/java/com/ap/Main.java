@@ -28,7 +28,7 @@ public class Main {
 
         UserRepo userRepo = new UserRepoImpl();
 
-        FindGitHubUserUseCase useCase = new FindGitHubUserImpl(remoteRepo, userRepo);
+        FindGitHubUserUseCase useCase = new FindGitHubUserImpl(gitHubRepo, userRepo);
         FindGitHubUsersUseCase useCases = new FindGitHubUsersImpl(useCase);
 
         UserId userId1 = new UserId(1L);

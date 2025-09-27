@@ -28,6 +28,7 @@ public class FindGitHubUserImpl implements FindGitHubUserUseCase {
 
     @Override
     public GitHubUser findGitHubUser(UserId userId) {
+        // If one fails the whole thing is aborted
         try (var scope = StructuredTaskScope.open()) {
             logger.info("Fetching all data for user with id {}", userId.userId());
             Subtask<User> user = scope.fork(() -> userRepo.findUserByIdPort(userId));
@@ -37,7 +38,7 @@ public class FindGitHubUserImpl implements FindGitHubUserUseCase {
             logger.info("Fetched all data for user with id {}", userId.userId());
             return new GitHubUser(user.get(), repositories.get());
         } catch (InterruptedException e) {
-            logger.error("Something went off {}", e);
+            logger.error("Something went off", e);
             throw new RuntimeException(e);
         }
     }
