@@ -28,13 +28,12 @@ public class GitHubRepoImpl implements GitHubRepo {
         try (var scope =
                      StructuredTaskScope.open(Joiner.<List<Repository>>anySuccessfulResultOrThrow())) {
             scope.fork(() -> cache.findRepositories(userId));
-            scope.fork(() -> remote.findRepositories(userId));
-//                    () -> {
-//                        final List<Repository> repositories = remote.findRepositories(userId);
-//                        logger.info("Received {} remote repositories ",repositories.size());
-//                        cache.addToCache(userId, repositories);
-//                        return repositories;
-//                    });
+            scope.fork(() -> {
+                var repos = remote.findRepositories(userId);
+                logger.info("Received {} remote repositories ", repos.size());
+                cache.addToCache(userId, repos);
+                return repos;
+            });
             return scope.join();
         }
     }
