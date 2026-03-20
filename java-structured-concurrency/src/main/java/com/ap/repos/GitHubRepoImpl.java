@@ -26,6 +26,10 @@ public class GitHubRepoImpl implements GitHubRepo {
     public List<Repository> findRepositories(UserId userId)
             throws InterruptedException, StructuredTaskScope.FailedException {
 
+        //var cat = StructuredTaskScope.open(Joiner.awaitAllSuccessfulOrThrow())
+
+
+
         //Joiner.anySuccessfulResultOrThrow => await for one to complete, ignore fails
         //Joiner.awaitAll() => wait for all to complete and fail and returns nothing
         //Joiner.allUntil => collects results from all subtasks until a specific condition is met
