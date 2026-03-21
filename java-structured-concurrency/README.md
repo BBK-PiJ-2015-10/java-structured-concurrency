@@ -55,7 +55,7 @@ try (var scope = StructuredTaskScope.open(Joiner.<CommonResultType>anySuccessful
 	return scope.join();
 
 
-} catch (Interrupted Exception e){
+} catch (InterruptedException e){
 
 
 }
@@ -65,5 +65,63 @@ try (var scope = StructuredTaskScope.open(Joiner.<CommonResultType>anySuccessful
 - Multiple requests in parallel (let's say 2)
 - For one of them, launch (two post requests in parallel)
 - Wait for the subrequests to complete to join to the second requests
+
+
+try (var scope= StructuredTaskScope.open()){
+
+    SubTask<CombinedResult1> combinedResult1SubTask = scope.fork(() => operationS1(input));
+    SubTask<Result2> result2SubTask = scope.ford(() => operation2(input));
+
+    scope.join();
+
+    CombinedResult1 combinedResult1 = combinedResult1SubTask.get();
+    Result2 result2 = result2Subtask.get();
+
+} catch(InterruptedException e) {
+
+}
+
+
+private Result1 operation1(Input input) {
+
+}
+
+private Result1A operation1A(Result1 result1) {
+
+}
+
+private ResultAB operation1A(Result1 result1) {
+
+}
+
+private Result2 operation2(Input input) {
+
+}
+
+private CombinedResult1 operations1(Input input) {
+
+    var operation1Result = operation1(input);
+
+    try (var scope = StructuredScope.open()){
+
+        Subtask<Result1A> result1A = scope.fork(() => operation1A(operation1Result) );
+        Subtask<Result1B> result1B = scope.forkd(() => operation1B(operation1Result));
+
+        scope.join();
+
+        Result1A = result1A.get();
+        Result1B = result1B.get()
+
+        CombinedResult1(Result1A,Result1B);
+
+    }
+
+    var operation1A = 
+
+
+
+}
+
+
 
 ## Use case 4
